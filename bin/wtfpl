@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require 'wtfpl_init'
+require 'thor'
+
+class WtfplInit::Cli::Exec < Thor
+  default_command :wtfpl_init
+
+  desc "wtfpl", "Download and rename WTFPL License file"
+  def wtfpl_init
+    begin
+      WtfplInit::Cli.new.run
+      say('LICENSE.md created', :green)
+    rescue Errno::EEXIST
+      say('LICENSE.md already exists', :red)
+    rescue => e
+      say("something wrong #{e.message}", :red)
+    end
+  end
+end
+
+WtfplInit::Cli::Exec.start(ARGV)
